@@ -1,6 +1,6 @@
 import React, { useState, useReducer } from 'react';
 import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
-import { signUp } from '../(services)/authService';
+import { signUp } from '../services/authService';
 import { FaCheck } from 'react-icons/fa';
 import { GoDotFill } from 'react-icons/go';
 

@@ -1,4 +1,4 @@
-import { changePasswordEndPoint, loginEndPoint, passwordResetRequestEndPoint, signUpEndPoint, verifyPasswordResetTokenEndPoint, verifyTokenEndPoint } from '@/app/(utils)/constants/endpoints';
+import { changePasswordEndPoint, loginEndPoint, passwordResetRequestEndPoint, signUpEndPoint, verifyPasswordResetTokenEndPoint, verifyTokenEndPoint } from '@/app/utils/constants/endpoints';
 import axios from 'axios';
 
 export const signIn = async (email: string, password: string) => {

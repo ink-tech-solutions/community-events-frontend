@@ -1,8 +1,7 @@
 'use client';
 import { createSlice } from '@reduxjs/toolkit';
-import { addUserToLocalStorage, removeUserFromLocalStorage, getUserFromLocalStorage } from '../../../app/(utils)/localStorage';
+import { addUserToLocalStorage, removeUserFromLocalStorage, getUserFromLocalStorage } from '../../../app/utils/localStorage';
 import { RootState } from '../store';
-import { clearTasks } from './tasks';
 
 export interface AuthState {
     isAuthenticated: boolean;

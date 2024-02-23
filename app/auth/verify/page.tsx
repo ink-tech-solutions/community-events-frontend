@@ -1,10 +1,10 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { verifyToken } from '@/app/(services)/authService';
-import { showToast } from '../../(utils)/alert';
-import Alert from '@/app/(components)/Alert';
+import React, { ReactNode, useEffect, useState, Suspense } from 'react';
+import { verifyToken } from '@/app/services/authService';
+import { showToast } from '../../utils/alert';
+import Alert from '@/app/components/Alert';
 
 const VerifyPage = () => {
     const searchParams = useSearchParams();
@@ -38,7 +38,9 @@ const VerifyPage = () => {
 
     return (
         <main className="flex min-h-screen flex-col justify-start p-24 items-center">
-            <div className="w-[400px]">{alert}</div>
+            <Suspense fallback={<div>Loading...</div>}>
+                <div className="w-[400px]">{alert}</div>
+            </Suspense>{' '}
             {!loading && (
                 <div className="mt-10 flex items-center gap-4">
                     <div

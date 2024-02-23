@@ -1,16 +1,14 @@
 'use client';
-
 import { useSearchParams, useRouter } from 'next/navigation';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { changePassword, verifyPasswordResetToken } from '@/app/(services)/authService';
-import { showToast } from '../../(utils)/alert';
-import Alert from '@/app/(components)/Alert';
-import PasswordInput from '@/app/(components)/PasswordInput';
+import React, { ReactNode, useEffect, useState, Suspense } from 'react';
+import { changePassword, verifyPasswordResetToken } from '@/app/services/authService';
+import Alert from '@/app/components/Alert';
+import PasswordInput from '@/app/components/PasswordInput';
 
 const PasswordResetPage = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const token = searchParams.get('token');
+    const token = searchParams?.get('token');
     const [alert, setAlert] = useState<ReactNode | null>(null);
     const [loading, setLoading] = useState(true);
     const [password, setPassword] = useState('');
@@ -54,7 +52,9 @@ const PasswordResetPage = () => {
 
     return (
         <main className="flex min-h-screen flex-col justify-start p-24 items-center">
-            <div className="w-[400px]">{alert}</div>
+            <Suspense fallback={<div>Loading...</div>}>
+                <div className="w-[400px]">{alert}</div>
+            </Suspense>{' '}
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form className="space-y-6" onSubmit={handleSubmitForm}>
                     <PasswordInput password={password} setPassword={setPassword} />

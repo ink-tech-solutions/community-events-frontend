@@ -3,8 +3,9 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Navbar from './(components)/Navbar';
+import Navbar from './components/Navbar';
 import StoreProvider from './StoreProvider';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -35,7 +36,7 @@ export default function RootLayout({
                         theme="light"
                     />
                     <Navbar />
-                    {children}
+                    <Suspense>{children}</Suspense>
                 </body>
             </html>
         </StoreProvider>
