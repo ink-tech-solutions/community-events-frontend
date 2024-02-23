@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from 'react';
 import Image from 'next/image';
-import { showToast } from '@/app/(utils)/alert';
-import { signUp } from '../(services)/authService';
+import { showToast } from '@/app/utils/alert';
+import { signUp } from '../services/authService';
 import { FaCheck } from 'react-icons/fa';
 import { GoDotFill } from 'react-icons/go';
 import { BiSolidShow, BiSolidHide } from 'react-icons/bi';

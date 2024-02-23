@@ -1,15 +1,15 @@
 'use client';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { showToast } from '@/app/(utils)/alert';
+import { showToast } from '@/app/utils/alert';
 import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
-import { signIn } from '../(services)/authService';
+import { signIn } from '../services/authService';
 import Alert from './Alert';
-import { AlertTypes } from '../(types)/common';
+import { AlertTypes } from '../types/common';
 import useAlert from './Alert';
 import { loginSuccess, logout, selectAuth } from '../../lib/redux/slices/auth';
 import { useAppDispatch, useAppSelector, useAppStore } from '../../lib/redux/hooks';
-import { addUserToLocalStorage, getUserFromLocalStorage, removeUserFromLocalStorage } from '../(utils)/localStorage';
+import { addUserToLocalStorage, getUserFromLocalStorage, removeUserFromLocalStorage } from '../utils/localStorage';
 
 interface Props {
     toggleHasAccount: () => void;

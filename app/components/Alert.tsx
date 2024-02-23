@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertProps } from '../(types)/common';
+import { AlertProps } from '../types/common';
 import { MdError } from 'react-icons/md';
 import { IoWarning } from 'react-icons/io5';
 import { FaCheckCircle } from 'react-icons/fa';

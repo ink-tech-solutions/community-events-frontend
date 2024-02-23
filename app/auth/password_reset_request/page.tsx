@@ -1,7 +1,7 @@
 'use client';
 import React, { ReactNode, useState } from 'react';
-import { passwordResetRequest } from '@/app/(services)/authService';
-import Alert from '@/app/(components)/Alert';
+import { passwordResetRequest } from '@/app/services/authService';
+import Alert from '@/app/components/Alert';
 
 const PasswordResetRequestPage = () => {
     const [email, setEmail] = useState('');

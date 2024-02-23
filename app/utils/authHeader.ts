@@ -1,5 +1,5 @@
-import { useAppSelector } from '../redux/hooks';
-import { selectAuth } from '../redux/slices/auth';
+import { useAppSelector } from '../../lib/redux/hooks';
+import { selectAuth } from '../../lib/redux/slices/auth';
 
 const AuthHeader = () => {
     const { accessToken } = useAppSelector(selectAuth);
