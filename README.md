@@ -1,2 +1,1 @@
-[Live](https://community-events-frontend.vercel.app/auth)
-
+Live => https://community-events-frontend.vercel.app
