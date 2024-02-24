@@ -10,6 +10,7 @@ import useAlert from './Alert';
 import { loginSuccess, logout, selectAuth } from '../../lib/redux/slices/auth';
 import { useAppDispatch, useAppSelector, useAppStore } from '../../lib/redux/hooks';
 import { addUserToLocalStorage, getUserFromLocalStorage, removeUserFromLocalStorage } from '../utils/localStorage';
+import useCapsLockDetector from '../hooks/useCapsLockDetector';
 
 interface Props {
     toggleHasAccount: () => void;
@@ -22,6 +23,7 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
     const [passwordInputFocus, setPasswordInputFocus] = useState(false);
     const [alert, setAlert] = useState<ReactNode | null>(null);
     const [rememberMe, setRememberMe] = useState(true);
+    const capsLockOn = useCapsLockDetector();
 
     const { userName, isAuthenticated, avatar } = useAppSelector(selectAuth);
 
@@ -134,7 +136,7 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
                                 onBlur={() => setPasswordInputFocus(false)}
                             />
                             {passwordInputFocus && (
-                                <div className="absolute top-1/2 right-9 transform -translate-y-1/2 cursor-pointer" onMouseDown={toggleShowPassword}>
+                                <div className={`absolute top-1/2 ${capsLockOn && !showPassword ? 'right-14' : 'right-9'} transform -translate-y-1/2 cursor-pointer`} onMouseDown={toggleShowPassword}>
                                     {showPassword ? <BiSolidShow /> : <BiSolidHide />}
                                 </div>
                             )}
