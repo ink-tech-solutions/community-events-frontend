@@ -20,6 +20,8 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
     const { userName, isAuthenticated, avatar } = useAppSelector(selectAuth);
 
+    console.log('avatar:', avatar);
+
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }: any) => (
@@ -58,7 +60,7 @@ export default function Navbar() {
                             </div>
                             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                 {/* <button className="text-white mr-3 bg-blue-400 p-4 py-1 rounded-xl"> */}
-                                <a href="/auth" className="text-white mr-3 bg-blue-400 p-4 py-1 rounded-xl cursor-pointer">
+                                <a href="/login" className="text-white mr-3 bg-blue-400 p-4 py-1 rounded-xl cursor-pointer">
                                     Sign In
                                 </a>
                                 {/* </button> */}
@@ -77,7 +79,7 @@ export default function Navbar() {
                                         <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                             <span className="absolute -inset-1.5" />
                                             <span className="sr-only">Open user menu</span>
-                                            <Image width={300} height={300} className="h-8 w-8 rounded-full" src={avatar} alt={`${userName}_profile_avatar`} />
+                                            <Image width={300} height={300} className="h-8 w-8 rounded-full" src={`/default-avatar.png`} alt={`${userName}_profile_avatar`} />
                                             {/* <img
                                                 className="h-8 w-8 rounded-full"
                                                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"

@@ -7,6 +7,7 @@ import { GoDotFill } from 'react-icons/go';
 import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
 import Alert from './Alert';
 import useCapsLockDetector from '../hooks/useCapsLockDetector';
+import { validateEmailRequirements, validateNameRequirements, validatePasswordRequirements } from '../utils/functions';
 
 type Action = { type: 'updateCondition'; key: string; value: boolean } | { type: 'updateStrength'; value: number } | { type: 'reset' };
 
@@ -67,8 +68,8 @@ const SignUp: React.FC<Props> = ({ toggleHasAccount }) => {
         e.preventDefault();
 
         // Validate inputs
-        const nameError = validateName(name);
-        const emailError = validateEmail(email);
+        const nameError = validateNameRequirements(name);
+        const emailError = validateEmailRequirements(email);
         const passwordError = validatePasswordRequirements(password);
 
         // Update errors state
@@ -186,54 +187,7 @@ const SignUp: React.FC<Props> = ({ toggleHasAccount }) => {
         validatePassword(newPassword);
     };
     // Validation function for email
-    const validateName = (value: string) => {
-        if (!value) {
-            return 'Name field can not be empty.';
-        }
 
-        if (value.length < 3) {
-            return 'Name must be at least 3 characters long.';
-        }
-        if (value.length > 50) {
-            return 'Name cannot be more than 50 characters long.';
-        }
-
-        return;
-    };
-    const validateEmail = (value: string) => {
-        if (!value) {
-            return 'Email field can not be empty.';
-        }
-        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-
-        if (!emailRegex.test(value)) {
-            return 'Please provide a valid email.';
-        }
-    };
-    // Validation function for email
-    const validatePasswordRequirements = (value: string) => {
-        if (!value) {
-            return 'Email field can not be empty.';
-        }
-        const errors = [];
-
-        if (password.length < 6) {
-            errors.push('6 characters');
-        }
-        if (!/(?=.*[a-z])/.test(password)) {
-            errors.push('one lowercase letter');
-        }
-        if (!/(?=.*[A-Z])/.test(password)) {
-            errors.push('one uppercase letter');
-        }
-        if (!/(?=.*\d)/.test(password)) {
-            errors.push('one digit');
-        }
-
-        if (errors.length > 0) {
-            return `Password must include at least ${errors.join(', ')}.`;
-        }
-    };
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
