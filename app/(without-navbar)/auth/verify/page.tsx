@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import React, { ReactNode, useEffect, useState, Suspense } from 'react';
 import { verifyToken } from '@/app/services/authService';
-import { showToast } from '../../utils/alert';
+import { showToast } from '../../../utils/alert';
 import Alert from '@/app/components/Alert';
 
 const VerifyPage = () => {
