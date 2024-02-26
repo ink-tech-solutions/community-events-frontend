@@ -5,17 +5,13 @@ import Testimonials from './components/Testimonials';
 import Faq from './components/Faq';
 import Cta from './components/Cta';
 import Footer from './components/Footer';
-import { benefitOne, benefitTwo } from './utils/data';
+import { benefitOne, benefitTwo } from './utils/Data';
 import Navbar from './components/Navbar2';
 import Hero from './components/Hero';
 
 const Home: React.FC = () => {
     return (
         <div className="bg-gray-100 dark:bg-slate-800 px-24 flex min-h-screen flex-col justify-start items-center">
-            {/* <div className="container mx-auto">
-                <h1 className="text-4xl font-bold text-center mb-8">Welcome to Your Website</h1>
-                <p className="text-lg text-center text-gray-700">This is a beautiful landing page created with Next.js, Tailwind CSS, and TypeScript.</p>
-            </div> */}
             <Navbar />
             <Hero />
             <SectionTitle pretitle="Community Events Benefits" title=" Why should you use Community Events">
