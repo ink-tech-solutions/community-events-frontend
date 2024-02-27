@@ -20,12 +20,9 @@ const PasswordResetPage = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const dispatch = useDispatch();
     const isLoading = useSelector(selectLoading);
-    console.log('loading1:', isLoading);
 
     const handleVerifyToken = async (token: string) => {
         dispatch(setLoading(true));
-        console.log('loading2:', isLoading);
-
         try {
             const result = await verifyPasswordResetToken(token);
             // if (result.statusCode === 200) {
@@ -48,7 +45,6 @@ const PasswordResetPage = () => {
             dispatch(setLoading(false));
         }
     };
-    console.log('loading3:', isLoading);
 
     const handleSubmitForm = async (e: any) => {
         e.preventDefault();
@@ -96,12 +92,18 @@ const PasswordResetPage = () => {
             {/* <Suspense fallback={<div>Loading...</div>}>
                 <div className="w-[400px]">{alert}</div>
             </Suspense>{' '} */}
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">{errors.token && <Alert type="danger" message={errors.token} />}</div>
+            <Suspense fallback={<div>Loading...</div>}>
+                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">{errors.token && <Alert type="danger" message={errors.token} />}</div>
+            </Suspense>
+
             {isTokenVerified && (
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    {errors.password && <Alert type="danger" message={errors.password} />}
-                    {successMessage && <Alert type="success" message={successMessage} />}
+                    <Suspense fallback={<div>Loading...</div>}>
+                        {errors.password && <Alert type="danger" message={errors.password} />}
+                        {successMessage && <Alert type="success" message={successMessage} />}
+                    </Suspense>
                     <form className="space-y-6" onSubmit={handleSubmitForm}>
+                        <p className=""> Please enter your new password</p>
                         <PasswordInput password={password} setPassword={setPassword} />
                         <div>
                             <button
@@ -114,19 +116,6 @@ const PasswordResetPage = () => {
                     </form>
                 </div>
             )}
-
-            {/* <form className="space-y-6" onSubmit={handleFormSubmit}></form> */}
-            {/* {!loading && (
-                <div className="mt-10 flex items-center gap-4">
-                    <div
-                        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-blue-500 motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                        role="status"
-                    >
-                        <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
-                    </div>{' '}
-                    <p className=""> Please enter your new password</p>
-                </div>
-            )} */}
         </main>
     ) : null;
 };

@@ -37,9 +37,8 @@ export default function RootLayout({
                         pauseOnHover={false}
                         theme="light"
                     />
-                    {/* <Navbar /> */}
                     <Providers>
-                        {children}
+                        <Suspense>{children}</Suspense>
                         <Loading />
                     </Providers>
                 </body>
