@@ -4,10 +4,15 @@ import ThemeChanger from './DarkSwitch';
 import Image from 'next/image';
 import { Disclosure } from '@headlessui/react';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 const Navbar = () => {
     const navigation = ['Product', 'Features', 'Pricing', 'Company', 'Blog'];
     const { theme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => setMounted(true), []);
+
     return (
         <div className="w-full">
             <nav className="container relative flex flex-wrap items-center justify-between p-8 mx-auto lg:justify-between xl:px-0">
@@ -17,12 +22,15 @@ const Navbar = () => {
                         <>
                             <div className="flex flex-wrap items-center justify-between w-full lg:w-auto">
                                 <Link href="/" className="cursor-pointer">
-                                    <Image
-                                        src={theme === 'light' ? '/community-events-logo-with-brand-name.png' : '/community-events-logo-with-brand-name-dark.png'}
-                                        alt="CE"
-                                        width="300"
-                                        height="100"
-                                    />
+                                    {mounted ? (
+                                        theme === 'light' ? (
+                                            <Image src="/community-events-logo-with-brand-name.png" alt="CE" width="300" height="100" />
+                                        ) : (
+                                            <Image src="/community-events-logo-with-brand-name-dark.png" alt="CE" width="300" height="100" />
+                                        )
+                                    ) : (
+                                        <div className="w-[300px] h-[120px]"></div>
+                                    )}
                                 </Link>
 
                                 <Disclosure.Button

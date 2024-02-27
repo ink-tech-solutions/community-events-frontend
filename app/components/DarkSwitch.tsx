@@ -9,7 +9,7 @@ const ThemeChanger = () => {
     // When mounted on client, now we can show the UI
     useEffect(() => setMounted(true), []);
 
-    if (!mounted) return null;
+    if (!mounted) return <div className="w-6"></div>;
 
     return (
         <div className="flex w-6 items-center justify-center">

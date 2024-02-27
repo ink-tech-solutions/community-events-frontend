@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from './Container';
 import { useTheme } from 'next-themes';
 
@@ -9,6 +9,9 @@ export default function Footer() {
     const navigation = ['Product', 'Features', 'Pricing', 'Company', 'Blog'];
     const legal = ['Terms', 'Privacy', 'Legal'];
     const { theme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => setMounted(true), []);
     return (
         <div className="relative">
             <Container>
@@ -17,7 +20,15 @@ export default function Footer() {
                         <div>
                             {' '}
                             <Link href="/" className="cursor-pointer">
-                                <Image src={theme === 'light' ? '/community-events-logo-with-brand-name.png' : '/community-events-logo-with-brand-name-dark.png'} alt="N" width="250" height="250" />
+                                {mounted ? (
+                                    theme === 'light' ? (
+                                        <Image src="/community-events-logo-with-brand-name.png" alt="CE" width="250" height="250" />
+                                    ) : (
+                                        <Image src="/community-events-logo-with-brand-name-dark.png" alt="CE" width="250" height="250" />
+                                    )
+                                ) : (
+                                    <div className="w-[250px] h-[100px]"></div>
+                                )}{' '}
                             </Link>
                         </div>
 

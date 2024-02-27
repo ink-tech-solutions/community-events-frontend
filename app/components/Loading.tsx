@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { MutatingDots, Oval } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
 import { selectLoading } from '../../lib/redux/slices/loading';
 

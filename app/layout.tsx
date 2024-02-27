@@ -24,25 +24,24 @@ export default function RootLayout({
     return (
         <StoreProvider>
             <html lang="en" suppressHydrationWarning>
-                <Providers>
-                    <body className={'min-h-screen'}>
-                        <ToastContainer
-                            position="top-center"
-                            autoClose={3000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss={false}
-                            draggable={false}
-                            pauseOnHover={false}
-                            theme="light"
-                        />
-                        {/* <Navbar /> */}
-                        {children}
+                <body className={'min-h-screen'}>
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss={false}
+                        draggable={false}
+                        pauseOnHover={false}
+                        theme="light"
+                    />
+                    <Providers>
+                        <Suspense>{children}</Suspense>
                         <Loading />
-                    </body>
-                </Providers>
+                    </Providers>
+                </body>
             </html>
         </StoreProvider>
     );

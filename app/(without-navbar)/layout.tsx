@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import '../globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -6,5 +7,10 @@ export default function AuthLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return <section>{children}</section>;
+    return (
+        <section>
+            {' '}
+            <Suspense>{children}</Suspense>
+        </section>
+    );
 }

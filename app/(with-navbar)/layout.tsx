@@ -1,6 +1,7 @@
 import '../globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../components/Navbar';
+import { Suspense } from 'react';
 
 export default function AuthLayout({
     children,
@@ -10,7 +11,7 @@ export default function AuthLayout({
     return (
         <section>
             <Navbar />
-            {children}
+            <Suspense>{children}</Suspense>
         </section>
     );
 }
