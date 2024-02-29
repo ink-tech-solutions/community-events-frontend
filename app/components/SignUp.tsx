@@ -1,6 +1,5 @@
+'use client';
 import React, { useState, useReducer } from 'react';
-import Image from 'next/image';
-import { showToast } from '@/app/utils/alert';
 import { signUp } from '../services/authService';
 import { FaCheck } from 'react-icons/fa';
 import { GoDotFill } from 'react-icons/go';
@@ -8,6 +7,7 @@ import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
 import Alert from './Alert';
 import useCapsLockDetector from '../hooks/useCapsLockDetector';
 import { validateEmailRequirements, validateNameRequirements, validatePasswordRequirements } from '../utils/functions';
+import { useTheme } from 'next-themes';
 
 type Action = { type: 'updateCondition'; key: string; value: boolean } | { type: 'updateStrength'; value: number } | { type: 'reset' };
 
@@ -189,12 +189,8 @@ const SignUp: React.FC<Props> = ({ toggleHasAccount }) => {
     // Validation function for email
 
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <Image className="mx-auto h-10 w-auto" width={300} height={200} src="/next.svg" alt="Your Company" />
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign Up</h2>
-            </div>
-
+        <div className="flex min-h-full flex-1 flex-col justify-start px-6 py-12 lg:px-8">
+            <h2 className="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">Sign Up</h2>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 {successMessage && <Alert type="success" message={successMessage} />}
                 <form className="space-y-6" onSubmit={handleSignUp}>

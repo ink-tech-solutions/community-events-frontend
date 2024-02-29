@@ -3,6 +3,7 @@ import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
 import { signUp } from '../services/authService';
 import { FaCheck } from 'react-icons/fa';
 import { GoDotFill } from 'react-icons/go';
+import useCapsLockDetector from '../hooks/useCapsLockDetector';
 
 type Action = { type: 'updateCondition'; key: string; value: boolean } | { type: 'updateStrength'; value: number };
 
@@ -41,6 +42,7 @@ const PasswordInput: React.FC<{ password: string; setPassword: (param: string) =
     const [passwordInputFocus, setPasswordInputFocus] = useState(false);
     const [passwordRequirements, dispatch] = useReducer(initialReducer, initialState);
     const [passwordStrength, setPasswordStrength] = useState(0);
+    const capsLockOn = useCapsLockDetector();
 
     const passwordStrengthColors = ['bg-gray-300', 'bg-red-500', 'bg-orange-300', 'bg-yellow-300', 'bg-green-500'];
 
@@ -148,7 +150,7 @@ const PasswordInput: React.FC<{ password: string; setPassword: (param: string) =
                     onBlur={() => setPasswordInputFocus(false)}
                 />
                 {passwordInputFocus && (
-                    <div className="absolute top-1/2 right-9 transform -translate-y-1/2 cursor-pointer" onMouseDown={toggleShowPassword}>
+                    <div className={`absolute top-1/2 ${capsLockOn && !showPassword ? 'right-14' : 'right-9'} transform -translate-y-1/2 cursor-pointer`} onMouseDown={toggleShowPassword}>
                         {showPassword ? <BiSolidShow /> : <BiSolidHide />}
                     </div>
                 )}

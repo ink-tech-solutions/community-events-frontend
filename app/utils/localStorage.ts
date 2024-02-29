@@ -1,5 +1,4 @@
 'use client';
-import { AuthState } from '../../lib/redux/slices/auth';
 
 export const addUserToLocalStorage = (auth: any) => {
     localStorage?.setItem('auth', JSON.stringify(auth));
@@ -10,7 +9,11 @@ export const removeUserFromLocalStorage = () => {
 };
 
 export const getUserFromLocalStorage = () => {
-    const result = localStorage?.getItem('auth');
-    const user = result ? JSON.parse(result) : { isAuthenticated: false, userName: '', accessToken: '', email: '' };
+    if (typeof window === 'undefined') {
+        // Return default values if running on the server
+        return { isAuthenticated: false, userName: '', accessToken: '', email: '', avatar: '' };
+    }
+    const result = window.localStorage.getItem('auth');
+    const user = result && JSON.parse(result);
     return user;
 };

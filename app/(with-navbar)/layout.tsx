@@ -9,7 +9,7 @@ export default function AuthLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <section>
+        <section className="px-4 sm:px-12 xl:px-24 flex min-h-screen flex-col justify-start items-center">
             <Navbar />
             <Suspense>{children}</Suspense>
         </section>
