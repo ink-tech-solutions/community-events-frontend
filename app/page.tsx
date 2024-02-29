@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import SectionTitle from './components/SectionTitle';
 import Benefits from './components/Benefits';
@@ -6,12 +7,19 @@ import Faq from './components/Faq';
 import Cta from './components/Cta';
 import Footer from './components/Footer';
 import { benefitOne, benefitTwo } from './utils/Data';
-import Navbar from './components/Navbar2';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import { useAppSelector } from '@/lib/redux/hooks';
+import { selectAuth } from '@/lib/redux/slices/auth';
 
 const Home: React.FC = () => {
+    const { userName, isAuthenticated, avatar } = useAppSelector(selectAuth);
+    console.log(userName, 'userName');
+    console.log(isAuthenticated, 'isAuthenticated');
+    console.log(avatar, 'avatar');
+
     return (
-        <div className="bg-gray-100 dark:bg-slate-800 px-24 flex min-h-screen flex-col justify-start items-center">
+        <div className="px-4 sm:px-12 xl:px-24 flex min-h-screen flex-col justify-start items-center">
             <Navbar />
             <Hero />
             <SectionTitle pretitle="Community Events Benefits" title=" Why should you use Community Events">

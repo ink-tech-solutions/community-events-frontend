@@ -1,14 +1,11 @@
 'use client';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { showToast } from '@/app/utils/alert';
 import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
 import { signIn } from '../services/authService';
 import Alert from './Alert';
 import { AlertTypes } from '../types/common';
-import useAlert from './Alert';
-import { loginSuccess, logout, selectAuth } from '../../lib/redux/slices/auth';
-import { useAppDispatch, useAppSelector, useAppStore } from '../../lib/redux/hooks';
+import { loginSuccess, selectAuth } from '../../lib/redux/slices/auth';
+import { useAppDispatch, useAppStore } from '../../lib/redux/hooks';
 import { addUserToLocalStorage, getUserFromLocalStorage, removeUserFromLocalStorage } from '../utils/localStorage';
 import useCapsLockDetector from '../hooks/useCapsLockDetector';
 
@@ -22,14 +19,7 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [passwordInputFocus, setPasswordInputFocus] = useState(false);
     const [alert, setAlert] = useState<ReactNode | null>(null);
-    const [rememberMe, setRememberMe] = useState(true);
     const capsLockOn = useCapsLockDetector();
-
-    const { userName, isAuthenticated, avatar } = useAppSelector(selectAuth);
-
-    const handleCheckboxChange = () => {
-        setRememberMe(prev => !prev);
-    };
 
     const store = useAppStore();
     const initialized = useRef(false);
@@ -71,14 +61,8 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
                     avatar: result.avatar,
                     accessToken: result.access_token,
                 };
-
                 dispatch(loginSuccess(user));
-
-                if (rememberMe) {
-                    addUserToLocalStorage({ ...user, password });
-                } else {
-                    removeUserFromLocalStorage();
-                }
+                addUserToLocalStorage(user);
             }
         } catch (error) {
             handleSetAlert('danger', (error as any).response.data.message, 3000);
@@ -86,11 +70,8 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
     };
 
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <Image className="mx-auto h-10 w-auto" width={300} height={200} src="/next.svg" alt="Your Company" />
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign In</h2>
-            </div>
+        <div className="flex min-h-full flex-1 flex-col justify-start px-6 py-12 lg:px-8">
+            <h2 className="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900 dark:text-gray-200">Sign In</h2>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 {alert}
                 <form className="space-y-6" onSubmit={handleSignIn}>
@@ -140,12 +121,6 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
                                     {showPassword ? <BiSolidShow /> : <BiSolidHide />}
                                 </div>
                             )}
-                        </div>
-                        <div className="flex items-center mt-4">
-                            <input id="remember-me" type="checkbox" checked={rememberMe} onChange={handleCheckboxChange} className="form-checkbox h-5 w-5 text-green-500 cursor-pointer" />
-                            <label htmlFor="remember-me" className="ml-2 text-sm font-medium leading-6 text-gray-900">
-                                Remember me
-                            </label>
                         </div>
                     </div>
 

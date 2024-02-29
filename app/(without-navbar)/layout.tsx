@@ -8,7 +8,7 @@ export default function AuthLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <section>
+        <section className="h-screen">
             {' '}
             <Suspense>{children}</Suspense>
         </section>

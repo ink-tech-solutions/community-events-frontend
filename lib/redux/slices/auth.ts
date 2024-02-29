@@ -11,7 +11,7 @@ export interface AuthState {
     avatar: string;
 }
 
-// const initialState: AuthState = getUserFromLocalStorage() || { isAuthenticated: false, userName: '', accessToken: '', email: '' };
+// const initialState: AuthState = getUserFromLocalStorage();
 const initialState: AuthState = { isAuthenticated: false, userName: '', accessToken: '', email: '', avatar: '' };
 
 export const authSlice = createSlice({
