@@ -1,25 +1,28 @@
 'use client';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
 import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
 import { signIn } from '../services/authService';
 import Alert from './Alert';
 import { AlertTypes } from '../types/common';
 import { loginSuccess, selectAuth } from '../../lib/redux/slices/auth';
 import { useAppDispatch, useAppStore } from '../../lib/redux/hooks';
-import { addUserToLocalStorage, getUserFromLocalStorage, removeUserFromLocalStorage } from '../utils/localStorage';
+import { addUserToLocalStorage } from '../utils/localStorage';
 import useCapsLockDetector from '../hooks/useCapsLockDetector';
+import { FormEvent } from 'react';
 
 interface Props {
     toggleHasAccount: () => void;
 }
 
 const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState(false);
-    const [passwordInputFocus, setPasswordInputFocus] = useState(false);
+    const [passwordInputFocus, setPasswordInputFocus] = useState(true);
     const [alert, setAlert] = useState<ReactNode | null>(null);
     const capsLockOn = useCapsLockDetector();
+
+    const isBrowser = typeof window !== 'undefined';
+
+    const isSafari = isBrowser && /^((?!chrome|android).)*safari/i.test(window.navigator?.userAgent);
 
     const store = useAppStore();
     const initialized = useRef(false);
@@ -42,30 +45,31 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
         }, duration);
     };
 
-    useEffect(() => {
-        setEmail(getUserFromLocalStorage()?.email);
-        setPassword(getUserFromLocalStorage()?.password);
-    }, []);
-    const handleSignIn = async (e: any) => {
+    const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const email = formData.get('email')?.toString();
+        const password = formData.get('password')?.toString();
 
-        try {
-            const result = await signIn(email, password);
+        if (email && password) {
+            try {
+                const result = await signIn(email, password);
 
-            if (result.statusCode === 200) {
-                handleSetAlert('success', result.message, 3000);
-                const user = {
-                    isAuthenticated: true,
-                    userName: result.userName,
-                    email: result.email,
-                    avatar: result.avatar,
-                    accessToken: result.access_token,
-                };
-                dispatch(loginSuccess(user));
-                addUserToLocalStorage(user);
+                if (result.statusCode === 200) {
+                    handleSetAlert('success', result.message, 3000);
+                    const user = {
+                        isAuthenticated: true,
+                        userName: result.userName,
+                        email: result.email,
+                        avatar: result.avatar,
+                        accessToken: result.access_token,
+                    };
+                    dispatch(loginSuccess(user));
+                    addUserToLocalStorage(user);
+                }
+            } catch (error) {
+                handleSetAlert('danger', (error as any).response.data.message, 3000);
             }
-        } catch (error) {
-            handleSetAlert('danger', (error as any).response.data.message, 3000);
         }
     };
 
@@ -86,8 +90,8 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                // value={email}
+                                // onChange={e => setEmail(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -110,14 +114,17 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
                                 type={showPassword ? 'text' : 'password'}
                                 autoComplete="current-password"
                                 required
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
+                                // value={password}
+                                // onChange={e => setPassword(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 px-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 onFocus={() => setPasswordInputFocus(true)}
                                 onBlur={() => setPasswordInputFocus(false)}
                             />
                             {passwordInputFocus && (
-                                <div className={`absolute top-1/2 ${capsLockOn && !showPassword ? 'right-14' : 'right-9'} transform -translate-y-1/2 cursor-pointer`} onMouseDown={toggleShowPassword}>
+                                <div
+                                    className={`absolute top-1/2 ${capsLockOn && !showPassword && isSafari ? 'right-14' : 'right-9'} transform -translate-y-1/2 cursor-pointer`}
+                                    onMouseDown={toggleShowPassword}
+                                >
                                     {showPassword ? <BiSolidShow /> : <BiSolidHide />}
                                 </div>
                             )}

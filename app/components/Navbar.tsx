@@ -9,7 +9,6 @@ import { BellIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { useAppSelector } from '@/lib/redux/hooks';
 import { loginSuccess, logout, selectAuth } from '@/lib/redux/slices/auth';
-import { usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { getUserFromLocalStorage } from '../utils/localStorage';
 
@@ -34,7 +33,7 @@ const Navbar = () => {
             // Update auth state if localStorage contains auth data
             dispatch(loginSuccess(storedAuth));
         }
-    }, []);
+    }, [dispatch]);
 
     const handleLogout = () => {
         dispatch(logout());
@@ -51,12 +50,12 @@ const Navbar = () => {
                                 <Link href="/" className="cursor-pointer">
                                     {mounted ? (
                                         theme === 'light' ? (
-                                            <Image src="/community-events-logo-with-brand-name.png" alt="CE" width="250" height="80" />
+                                            <Image src="/community-events-logo-with-brand-name.png" alt="CE" width="250" height="100" priority />
                                         ) : (
-                                            <Image src="/community-events-logo-with-brand-name-dark.png" alt="CE" width="250" height="80" />
+                                            <Image src="/community-events-logo-with-brand-name-dark.png" alt="CE" width="250" height="100" priority />
                                         )
                                     ) : (
-                                        <div className="w-[300px] h-[120px]"></div>
+                                        <div className="w-[250px] h-[100px]"></div>
                                     )}
                                 </Link>
 
@@ -75,7 +74,9 @@ const Navbar = () => {
                                         {!open && <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />}
                                     </svg>
                                 </Disclosure.Button>
-
+                                <div className="lg:hidden flex">
+                                    <ThemeChanger />
+                                </div>
                                 <Disclosure.Panel className="flex flex-wrap w-full my-5 lg:hidden">
                                     <>
                                         {navigation.map((item, index) => (
@@ -150,7 +151,7 @@ const Navbar = () => {
                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <Menu.Item>
                                             {({ active }: any) => (
-                                                <Link href="/profile:12" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                                <Link href="/profile/12" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
                                                     Settings
                                                 </Link>
                                             )}
@@ -167,7 +168,6 @@ const Navbar = () => {
                             </Menu>
                         </>
                     )}
-
                     <ThemeChanger />
                 </div>
             </nav>

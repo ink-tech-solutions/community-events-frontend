@@ -8,8 +8,8 @@ const useCapsLockDetector = () => {
             setCapsLockOn(e.getModifierState('CapsLock'));
         };
 
-        const handleKeyUp = () => {
-            setCapsLockOn(false);
+        const handleKeyUp = (e: KeyboardEvent) => {
+            setCapsLockOn(e.getModifierState('CapsLock'));
         };
 
         window.addEventListener('keydown', handleKeyPress);
