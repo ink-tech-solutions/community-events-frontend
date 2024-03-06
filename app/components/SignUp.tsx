@@ -7,7 +7,7 @@ import { BiSolidShow, BiSolidHide } from 'react-icons/bi';
 import Alert from './Alert';
 import useCapsLockDetector from '../hooks/useCapsLockDetector';
 import { validateEmailRequirements, validateNameRequirements, validatePasswordRequirements } from '../utils/functions';
-import { useTheme } from 'next-themes';
+import { FormEvent } from 'react';
 
 type Action = { type: 'updateCondition'; key: string; value: boolean } | { type: 'updateStrength'; value: number } | { type: 'reset' };
 

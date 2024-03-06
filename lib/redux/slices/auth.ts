@@ -1,7 +1,8 @@
-'use client';
 import { createSlice } from '@reduxjs/toolkit';
-import { addUserToLocalStorage, removeUserFromLocalStorage, getUserFromLocalStorage } from '../../../app/utils/localStorage';
 import { RootState } from '../store';
+import { Cookies } from 'react-cookie'; // Import react-cookie to handle cookies
+
+const cookies = new Cookies(); // Create a new instance of Cookies
 
 export interface AuthState {
     isAuthenticated: boolean;
@@ -11,8 +12,17 @@ export interface AuthState {
     avatar: string;
 }
 
-// const initialState: AuthState = getUserFromLocalStorage();
-const initialState: AuthState = { isAuthenticated: false, userName: '', accessToken: '', email: '', avatar: '' };
+// Function to retrieve user information from cookies
+const getUserFromCookies = (): AuthState => {
+    const userCookie = cookies.get('user'); // Get user information from cookies
+    if (userCookie) {
+        return userCookie;
+    }
+    return { isAuthenticated: false, userName: '', accessToken: '', email: '', avatar: '' };
+};
+
+// Initial state is set by retrieving user information from cookies
+const initialState: AuthState = getUserFromCookies();
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -24,7 +34,8 @@ export const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
             state.email = action.payload.email;
             state.avatar = action.payload.avatar;
-            addUserToLocalStorage(action.payload);
+            // Store user information in cookies
+            cookies.set('user', action.payload, { path: '/' });
         },
         logout: state => {
             state.isAuthenticated = false;
@@ -32,7 +43,8 @@ export const authSlice = createSlice({
             state.accessToken = '';
             state.email = '';
             state.avatar = '';
-            removeUserFromLocalStorage();
+            // Remove user information from cookies
+            cookies.remove('user', { path: '/' });
         },
     },
 });
