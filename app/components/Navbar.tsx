@@ -10,7 +10,8 @@ import { Fragment } from 'react';
 import { useAppSelector } from '@/lib/redux/hooks';
 import { loginSuccess, logout, selectAuth } from '@/lib/redux/slices/auth';
 import { useDispatch } from 'react-redux';
-import { getUserFromLocalStorage } from '../utils/localStorage';
+import { Cookies } from 'react-cookie';
+import { getUserFromCookies } from '../utils/functions';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
@@ -28,9 +29,9 @@ const Navbar = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const storedAuth = getUserFromLocalStorage();
+        const cookies = new Cookies();
+        const storedAuth = getUserFromCookies(cookies);
         if (storedAuth) {
-            // Update auth state if localStorage contains auth data
             dispatch(loginSuccess(storedAuth));
         }
     }, [dispatch]);

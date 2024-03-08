@@ -1,3 +1,5 @@
+import { AuthState } from '../types/common';
+
 export const validateNameRequirements = (value: string) => {
     if (!value) {
         return 'Name field can not be empty.';
@@ -45,4 +47,12 @@ export const validatePasswordRequirements = (value: string) => {
     if (errors.length > 0) {
         return `Password must include at least ${errors.join(', ')}.`;
     }
+};
+
+export const getUserFromCookies = (cookies: any): AuthState | false => {
+    const userCookie = cookies.get('user'); // Get user information from cookies
+    if (userCookie) {
+        return userCookie;
+    }
+    return false;
 };
