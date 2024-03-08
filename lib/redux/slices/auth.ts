@@ -1,28 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { Cookies } from 'react-cookie'; // Import react-cookie to handle cookies
+import { Cookies } from 'react-cookie';
+import { AuthState } from '@/app/types/common';
+import { getUserFromCookies } from '@/app/utils/functions';
 
-const cookies = new Cookies(); // Create a new instance of Cookies
+const cookies = new Cookies();
 
-export interface AuthState {
-    isAuthenticated: boolean;
-    userName: string;
-    accessToken: string;
-    email: string;
-    avatar: string;
-}
-
-// Function to retrieve user information from cookies
-const getUserFromCookies = (): AuthState => {
-    const userCookie = cookies.get('user'); // Get user information from cookies
-    if (userCookie) {
-        return userCookie;
-    }
-    return { isAuthenticated: false, userName: '', accessToken: '', email: '', avatar: '' };
+const initialState: AuthState = getUserFromCookies(cookies) || {
+    isAuthenticated: false,
+    userName: '',
+    accessToken: '',
+    email: '',
+    avatar: '',
 };
-
-// Initial state is set by retrieving user information from cookies
-const initialState: AuthState = getUserFromCookies();
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -34,7 +24,6 @@ export const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
             state.email = action.payload.email;
             state.avatar = action.payload.avatar;
-            // Store user information in cookies
             cookies.set('user', action.payload, { path: '/' });
         },
         logout: state => {
@@ -43,7 +32,6 @@ export const authSlice = createSlice({
             state.accessToken = '';
             state.email = '';
             state.avatar = '';
-            // Remove user information from cookies
             cookies.remove('user', { path: '/' });
         },
     },
