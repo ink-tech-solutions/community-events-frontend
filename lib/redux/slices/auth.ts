@@ -5,8 +5,9 @@ import { AuthState } from '@/app/types/common';
 import { getUserFromCookies } from '@/app/utils/functions';
 
 const cookies = new Cookies();
+const hasConsented = cookies.get('consent'); // Assume 'consent' is the cookie key for consent
 
-const initialState: AuthState = getUserFromCookies(cookies) || {
+const initialState: AuthState = getUserFromCookies() || {
     isAuthenticated: false,
     userName: '',
     accessToken: '',
@@ -24,7 +25,9 @@ export const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
             state.email = action.payload.email;
             state.avatar = action.payload.avatar;
-            cookies.set('user', action.payload, { path: '/' });
+            if (hasConsented) {
+                cookies.set('user', action.payload, { path: '/' });
+            }
         },
         logout: state => {
             state.isAuthenticated = false;
@@ -32,7 +35,9 @@ export const authSlice = createSlice({
             state.accessToken = '';
             state.email = '';
             state.avatar = '';
-            cookies.remove('user', { path: '/' });
+            if (hasConsented) {
+                cookies.remove('user', { path: '/' });
+            }
         },
     },
 });

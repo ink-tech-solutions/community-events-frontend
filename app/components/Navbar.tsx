@@ -8,10 +8,8 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { useAppSelector } from '@/lib/redux/hooks';
-import { loginSuccess, logout, selectAuth } from '@/lib/redux/slices/auth';
+import { logout, selectAuth } from '@/lib/redux/slices/auth';
 import { useDispatch } from 'react-redux';
-import { Cookies } from 'react-cookie';
-import { getUserFromCookies } from '../utils/functions';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
@@ -28,17 +26,47 @@ const Navbar = () => {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        const cookies = new Cookies();
-        const storedAuth = getUserFromCookies(cookies);
-        if (storedAuth) {
-            dispatch(loginSuccess(storedAuth));
-        }
-    }, [dispatch]);
-
     const handleLogout = () => {
         dispatch(logout());
     };
+
+    const profileMenu = (
+        <Menu as="div" className="relative">
+            <div className="rounded-full border-2 border-gray-700 dark:border-gray-300">
+                <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <span className="absolute -inset-1.5" />
+                    <span className="sr-only">Open user menu</span>
+                    <Image width={300} height={300} className="h-6 w-6 sm:w-8 sm:h-8 rounded-full" src={`/default-avatar.png`} alt={`${userName}_profile_avatar`} />
+                </Menu.Button>
+            </div>
+            <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+            >
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Item>
+                        {({ active }: any) => (
+                            <Link href="/profile/12" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                Settings
+                            </Link>
+                        )}
+                    </Menu.Item>
+                    <Menu.Item>
+                        {({ active }: any) => (
+                            <Link href="/" onClick={handleLogout} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                                Sign out
+                            </Link>
+                        )}
+                    </Menu.Item>
+                </Menu.Items>
+            </Transition>
+        </Menu>
+    );
 
     return (
         <div className="w-full">
@@ -51,12 +79,12 @@ const Navbar = () => {
                                 <Link href="/" className="cursor-pointer">
                                     {mounted ? (
                                         theme === 'light' ? (
-                                            <Image src="/community-events-logo-with-brand-name.png" alt="CE" width="250" height="100" priority />
+                                            <Image className="w-[200px] sm:w-[250px]" src="/community-events-logo-with-brand-name.png" alt="CE" width="250" height="100" priority />
                                         ) : (
-                                            <Image src="/community-events-logo-with-brand-name-dark.png" alt="CE" width="250" height="100" priority />
+                                            <Image className="w-[200px] sm:w-[250px]" src="/community-events-logo-with-brand-name-dark.png" alt="CE" width="250" height="100" priority />
                                         )
                                     ) : (
-                                        <div className="w-[250px] h-[100px]"></div>
+                                        <div className="w-[200px] sm:w-[250px] h-[100px]"></div>
                                     )}
                                 </Link>
 
@@ -75,10 +103,11 @@ const Navbar = () => {
                                         {!open && <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />}
                                     </svg>
                                 </Disclosure.Button>
-                                <div className="lg:hidden flex">
+                                <div className="lg:hidden flex gap-2">
+                                    {profileMenu}
                                     <ThemeChanger />
                                 </div>
-                                <Disclosure.Panel className="flex flex-wrap w-full my-5 lg:hidden">
+                                <Disclosure.Panel className="flex flex-wrap w-full my-5 lg:hidden px-8">
                                     <>
                                         {navigation.map((item, index) => (
                                             <Link
@@ -89,9 +118,11 @@ const Navbar = () => {
                                                 {item}
                                             </Link>
                                         ))}
-                                        <Link href="/" className="w-full px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md lg:ml-5">
-                                            Get Started
-                                        </Link>
+                                        {!isAuthenticated && (
+                                            <Link href="/" className="w-full px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md lg:ml-5">
+                                                Get Started
+                                            </Link>
+                                        )}
                                     </>
                                 </Disclosure.Panel>
                             </div>
@@ -115,59 +146,27 @@ const Navbar = () => {
                     </ul>
                 </div>
 
-                <div className="hidden mr-3 space-x-4 lg:flex nav__item">
-                    {!isAuthenticated ? (
-                        <Link href="/login" className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5">
-                            Get Started
-                        </Link>
-                    ) : (
-                        <>
-                            <button
-                                type="button"
-                                className="relative rounded-full p-1 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                            >
-                                <span className="absolute -inset-1.5" />
-                                <span className="sr-only">View notifications</span>
-                                <BellIcon strokeWidth={2} className="h-6 w-6" aria-hidden="true" />
-                            </button>
-
-                            {/* Profile dropdown */}
-                            <Menu as="div" className="relative ml-3">
-                                <div className="rounded-full border-2 border-gray-700 dark:border-gray-300">
-                                    <Menu.Button className="relative flex rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                        <span className="absolute -inset-1.5" />
-                                        <span className="sr-only">Open user menu</span>
-                                        <Image width={300} height={300} className="h-8 w-8 rounded-full" src={`/default-avatar.png`} alt={`${userName}_profile_avatar`} />
-                                    </Menu.Button>
-                                </div>
-                                <Transition
-                                    as={Fragment}
-                                    enter="transition ease-out duration-100"
-                                    enterFrom="transform opacity-0 scale-95"
-                                    enterTo="transform opacity-100 scale-100"
-                                    leave="transition ease-in duration-75"
-                                    leaveFrom="transform opacity-100 scale-100"
-                                    leaveTo="transform opacity-0 scale-95"
+                <div className="hidden space-x-4 lg:flex nav__item">
+                    {mounted ? (
+                        !isAuthenticated ? (
+                            <Link href="/login" className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5">
+                                Get Started
+                            </Link>
+                        ) : (
+                            <>
+                                <button
+                                    type="button"
+                                    className="relative rounded-full p-1 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                 >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        <Menu.Item>
-                                            {({ active }: any) => (
-                                                <Link href="/profile/12" className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
-                                                    Settings
-                                                </Link>
-                                            )}
-                                        </Menu.Item>
-                                        <Menu.Item>
-                                            {({ active }: any) => (
-                                                <Link href="/" onClick={handleLogout} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
-                                                    Sign out
-                                                </Link>
-                                            )}
-                                        </Menu.Item>
-                                    </Menu.Items>
-                                </Transition>
-                            </Menu>
-                        </>
+                                    <span className="absolute -inset-1.5" />
+                                    <span className="sr-only">View notifications</span>
+                                    <BellIcon strokeWidth={2} className="h-6 w-6" aria-hidden="true" />
+                                </button>
+                                {profileMenu}
+                            </>
+                        )
+                    ) : (
+                        <div className="w-[124px]"></div>
                     )}
                     <ThemeChanger />
                 </div>
