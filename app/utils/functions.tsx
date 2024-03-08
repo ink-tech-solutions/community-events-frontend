@@ -1,4 +1,5 @@
 import { AuthState } from '../types/common';
+import { Cookies } from 'react-cookie';
 
 export const validateNameRequirements = (value: string) => {
     if (!value) {
@@ -49,7 +50,8 @@ export const validatePasswordRequirements = (value: string) => {
     }
 };
 
-export const getUserFromCookies = (cookies: any): AuthState | false => {
+export const getUserFromCookies = (): AuthState | false => {
+    const cookies = new Cookies();
     const userCookie = cookies.get('user'); // Get user information from cookies
     if (userCookie) {
         return userCookie;

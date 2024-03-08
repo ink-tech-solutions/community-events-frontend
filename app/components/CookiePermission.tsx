@@ -1,34 +1,47 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Cookies } from 'react-cookie';
 
-interface CookiePermissionProps {
-    onConsentGiven: () => void;
-}
+const CookiePermission = () => {
+    const [showConsentBanner, setShowConsentBanner] = useState(false);
 
-const CookiePermission: React.FC<CookiePermissionProps> = ({ onConsentGiven }) => {
-    const [consentGiven, setConsentGiven] = useState(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const cookies = new Cookies();
+    const hasConsent = cookies.get('consent'); // Assume 'consent' is the cookie key for consent
+    useEffect(() => {
+        if (!hasConsent) {
+            setShowConsentBanner(true);
+        }
+    }, []);
 
-    const handleConsent = () => {
-        // Set consent given in state
-        setConsentGiven(true);
-
-        // Call the callback function to inform the parent component
-        onConsentGiven();
+    const handleAccept = () => {
+        // setCookie('cookieConsent', true, { path: '/' });
+        cookies.set('consent', true, { path: '/' });
+        setShowConsentBanner(false);
     };
 
-    const handleReject = () => {
-        console.log('not accepted');
-
-        // Handle rejection if needed (e.g., redirect to privacy policy)
+    const handleDecline = () => {
+        cookies.set('consent', false, { path: '/' });
+        setShowConsentBanner(false);
     };
 
-    return !consentGiven ? (
-        <div className="cookie-banner">
-            <p>This website uses cookies to enhance user experience and store authentication information. By continuing to use this site, you consent to the use of cookies.</p>
-            <button onClick={handleConsent}>Accept</button>
-            <button onClick={handleReject}>Reject</button>
-        </div>
-    ) : null;
+    if (showConsentBanner && !hasConsent) {
+        return (
+            <div className="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4 text-center">
+                <p className="text-sm">
+                    We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.{' '}
+                    <button className="text-blue-300 hover:text-blue-400" onClick={handleAccept}>
+                        Accept
+                    </button>{' '}
+                    <button className="text-blue-300 hover:text-blue-400" onClick={handleDecline}>
+                        Decline
+                    </button>
+                </p>
+            </div>
+        );
+    }
+
+    return null;
 };
 
 export default CookiePermission;

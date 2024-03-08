@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import SectionTitle from './components/SectionTitle';
 import Benefits from './components/Benefits';
 import Testimonials from './components/Testimonials';
@@ -9,22 +9,13 @@ import Footer from './components/Footer';
 import { benefitOne, benefitTwo } from './utils/Data';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import { useAppSelector } from '@/lib/redux/hooks';
-import { selectAuth } from '@/lib/redux/slices/auth';
 import CookiePermission from './components/CookiePermission';
 import { CookiesProvider } from 'react-cookie';
 
 const Home: React.FC = () => {
-    const { userName, isAuthenticated, avatar } = useAppSelector(selectAuth);
-    const handleConsentGiven = () => {
-        // Perform actions after user gives consent (e.g., initialize authentication)
-        console.log('acccepted');
-    };
     return (
         <CookiesProvider>
-            <div className="px-4 sm:px-12 xl:px-24 flex min-h-screen flex-col justify-start items-center">
-                <CookiePermission onConsentGiven={handleConsentGiven} />
-
+            <div className="px-2 sm:px-12 xl:px-24 flex min-h-screen flex-col justify-start items-center">
                 <Navbar />
                 <Hero />
                 <SectionTitle pretitle="Community Events Benefits" title=" Why should you use Community Events">
@@ -46,6 +37,7 @@ const Home: React.FC = () => {
                 <Faq />
                 <Cta />
                 <Footer />
+                <CookiePermission />
             </div>
         </CookiesProvider>
     );
