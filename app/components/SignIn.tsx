@@ -6,7 +6,6 @@ import Alert from './Alert';
 import { AlertTypes } from '../types/common';
 import { loginSuccess, selectAuth } from '../../lib/redux/slices/auth';
 import { useAppDispatch, useAppStore } from '../../lib/redux/hooks';
-import { addUserToLocalStorage } from '../utils/localStorage';
 import useCapsLockDetector from '../hooks/useCapsLockDetector';
 import { FormEvent } from 'react';
 
@@ -65,7 +64,6 @@ const SignIn: React.FC<Props> = ({ toggleHasAccount }) => {
                         accessToken: result.access_token,
                     };
                     dispatch(loginSuccess(user));
-                    addUserToLocalStorage(user);
                 }
             } catch (error) {
                 handleSetAlert('danger', (error as any).response.data.message, 3000);
